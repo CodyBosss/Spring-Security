@@ -1,3 +1,5 @@
+package com.codybosss.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,11 +16,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authz -> authz            		
-                .requestMatchers("/public/**").permitAll() 
-                .anyRequest().authenticated() 
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/public/**").permitAll() // Allow access to /public/** URLs without authentication
+                .anyRequest().authenticated() // Require authentication for all other requests
             )
-            .formLogin(); 
+            .formLogin(form -> form // Configuring form-based login
+                .loginPage("/login") // Custom login page (optional)
+                .permitAll() // Allow everyone to see the login page
+            );
         return http.build();
     }
 
