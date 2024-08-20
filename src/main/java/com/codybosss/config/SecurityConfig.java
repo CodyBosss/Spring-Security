@@ -17,23 +17,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/public/**").permitAll() // Allow access to /public/** URLs without authentication
-                .anyRequest().authenticated() // Require authentication for all other requests
+                .requestMatchers("/public/**").permitAll()
+                .anyRequest().authenticated()
             )
-            .formLogin(form -> form // Configuring form-based login
-                .loginPage("/login") // Custom login page (optional)
-                .permitAll() // Allow everyone to see the login page
-            );
+            .formLogin(form -> form.permitAll());
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withDefaultPasswordEncoder() // Set up a user with default password encoder
-            .username("user") // Username: user
-            .password("password") // Password: password
-            .roles("USER") // Role: USER
+        manager.createUser(User.withDefaultPasswordEncoder()
+            .username("user")
+            .password("password")
+            .roles("USER")
             .build());
         return manager;
     }
